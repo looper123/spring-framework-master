@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.itcast.yitao.manager.user.mapper">
+
+    <resultMap id="userMap" type="com.itcast.yitao.pojo.UserEntity">
+        <result column="user_code" property="userCode" jdbcType="VARCHAR"/>
+        <result column="emp_name" property="empName" jdbcType="VARCHAR"/>
+        <result column="org_id" property="orgId" jdbcType="VARCHAR"/>
+        <result column="org_name" property="orgName" jdbcType="VARCHAR"/>
+        <result column="org_level" property="orgLevel" jdbcType="NUMERIC"/>
+        <result column="job_category_name" property="jobCategoryName" jdbcType="VARCHAR"/>
+        <result column="org_type_name" property="orgTypeName" jdbcType="VARCHAR"/>
+        <result column="fin_id" property="finId" jdbcType="VARCHAR"/>
+        <result column="fin_name" property="finName" jdbcType="VARCHAR"/>
+        <result column="real_org_id" property="realOrgId" jdbcType="VARCHAR"/>
+        <result column="real_org_name" property="realOrgName" jdbcType="VARCHAR"/>
+        <result column="real_org_level" property="realOrgLevel" jdbcType="NUMERIC"/>
+        <result column="PARENT_ORG_NAME" property="parentOrgName" jdbcType="VARCHAR"/>
+        <result column="LEVEL_ONE_ORG_NAME" property="levelOneOrgName" jdbcType="VARCHAR"/>
+        <result column="LEVEL_TWO_ORG_NAME" property="levelTwoOrgName" jdbcType="VARCHAR"/>
+        <result column="LEVEL_THREE_ORG_NAME" property="levelThreeOrgName" jdbcType="VARCHAR"/>
+        <result column="LEVEL_FOUR_ORG_NAME" property="levelFourOrgName" jdbcType="VARCHAR"/>
+        <result column="LEVEL_FIVE_ORG_NAME" property="levelFiveOrgName" jdbcType="VARCHAR"/>
+        <result column="LEVEL_SIX_ORG_NAME" property="levelSixOrgName" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <sql id="baseColumn">
+        user_code,
+        emp_name,
+        org_id,
+        org_level,
+        job_category_name,
+        org_type_name,
+        fin_id,
+        fin_name,
+        real_org_id,
+        real_org_name,
+        real_org_level,
+        PARENT_ORG_NAME,
+        LEVEL_ONE_ORG_NAME,
+        LEVEL_TWO_ORG_NAME,
+        LEVEL_THREE_ORG_NAME,
+        LEVEL_FOUR_ORG_NAME,
+        LEVEL_FIVE_ORG_NAME,
+        LEVEL_SIX_ORG_NAME
+    </sql>
+
+    <!-- <![CDATA[ ]]  在其中的特殊符号 不参与xml的解析 如 '>' '<'  >-->
+    <!-- resultMap 和 resultType的区别 -->
+    <select id="selectAll" resultMap="userMap">
+          select
+           <include refid="baseColumn"/>
+           from t_mbi_auth_user
+           <![CDATA[
+           where org_level=#{orgLevel}
+           ]]>
+    </select>
+
+    <!--resultType返回 int -->
+    <select id="counts" resultType="java.lang.Integer">
+        select
+        COUNT (user_code)
+        from t_mbi_auth_user
+        where org_level=1
+    </select>
+
+</mapper>

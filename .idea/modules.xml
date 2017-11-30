@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/yitao.iml" filepath="$PROJECT_DIR$/yitao.iml" />
+      <module fileurl="file://$PROJECT_DIR$/yitao-manager/yitao-manager.iml" filepath="$PROJECT_DIR$/yitao-manager/yitao-manager.iml" />
+      <module fileurl="file://$PROJECT_DIR$/yitao-web/yitao-web.iml" filepath="$PROJECT_DIR$/yitao-web/yitao-web.iml" />
+    </modules>
+  </component>
+</project>

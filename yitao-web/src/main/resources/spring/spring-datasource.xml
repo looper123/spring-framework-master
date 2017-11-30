@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:tx="http://www.springframework.org/schema/tx"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd">
+
+       <!--dataSource-->
+       <bean id="dataSourceForMbi" class="org.springframework.jndi.JndiObjectFactoryBean">
+              <property name="jndiName"  value="jdbc/oracle_mobile"/>
+              <property name="resourceRef"  value="true"/>
+       </bean>
+
+    <bean id="proxyDataSourceForMbi" class="net.sf.log4jdbc.Log4jdbcProxyDataSource">
+        <constructor-arg ref="dataSourceForMbi"/>
+    </bean>
+
+       <!--transaction-->
+      <bean id="transactionForMbi" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+             <property name="dataSource"  ref="dataSourceForMbi"/>
+      </bean>
+
+        <!--transaction strategy-->
+        <tx:advice id="txAdvice"  transaction-manager="transactionForMbi">
+            <tx:attributes>
+                <!--查询方法设置事务为只读-->
+                <tx:method name="query*"  read-only="true" />
+                <tx:method name="get*"  read-only="true" />
+                <tx:method name="find*"  read-only="true" />
+                <!--插入 删除 修改-->
+            </tx:attributes>
+        </tx:advice>
+
+       <!--事务注解驱动-->
+       <tx:annotation-driven transaction-manager="transactionForMbi"/>
+
+       <!--mybatis sqlSessionFactory-->
+       <bean id="sqlSessionFactoryForMbi"  class="org.mybatis.spring.SqlSessionFactoryBean">
+              <!--mybatis.xml 配置文件-->
+              <property name="configLocation"  value="classpath:mybatis/mybatis.xml"/>
+              <!--.mapper 配置文件-->
+              <property name="mapperLocations"  value="classpath*:com/itcast/yitao/mapper/*.xml"/>
+              <!--别名扫描包 减少实体类名长度-->
+              <!--<property name="typeAliases"  value="com.itcast.yitao.pojo"/>-->
+                <property name="dataSource" ref="proxyDataSourceForMbi"/>
+       </bean>
+
+       <!--mapper接口扫描器-->
+       <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+           <property name="basePackage" value="com.itcast.yitao.mapper"/>
+       </bean>
+
+      <!--jdbc模板类 对jdbc进行薄封装 包括sql的执行 异常捕获 查询结果的转换-->
+      <bean id="jdbcTemplateForMbi"  class="org.springframework.jdbc.core.JdbcTemplate">
+          <property name="dataSource"  ref="proxyDataSourceForMbi"/>
+      </bean>
+
+</beans>

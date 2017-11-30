@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.itcast.yitao.manager.userInfo.mapper">
+
+    <resultMap id="userMap" type="com.itcast.yitao.pojo.UserInfo">
+        <result column="user_id" property="userId" jdbcType="VARCHAR"/>
+        <result column="password" property="password" jdbcType="VARCHAR"/>
+        <result column="phone_number" property="phoneNumber" jdbcType="VARCHAR"/>
+        <result column="mail_box" property="mailBox" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <sql id="baseColumn">
+        user_id,
+        password,
+        phone_number,
+        mail_box
+    </sql>
+
+    <!-- <![CDATA[ ]]  在其中的特殊符号 不参与xml的解析 如 '>' '<'  >-->
+    <!-- resultMap 和 resultType的区别 -->
+    <select id="queryUserByUserId" resultMap="userMap">
+        select
+        <include refid="baseColumn"/>
+        from t_user_info
+        <![CDATA[
+           where user_id=#{userId,jdbcType=VARCHAR}
+           ]]>
+    </select>
+
+    <insert id="addUserInfo" parameterType="com.itcast.yitao.pojo.UserInfo">
+        insert INTO t_user_info
+        (
+        <include refid="baseColumn"/>
+        )
+        VALUES
+        (
+        #{userId,jdbcType=VARCHAR},
+        #{password,jdbcType=VARCHAR},
+        #{phoneNumber,jdbcType=VARCHAR},
+        #{mailBox,jdbcType=VARCHAR}
+        )
+    </insert>
+
+
+</mapper>
